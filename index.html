@@ -78,6 +78,24 @@
           <button id="resetBtn" class="btn btn-secondary" disabled aria-label="Reset stopwatch">RESET</button>
         </div>
 
+        <!-- Compact Lap Statistics Bar -->
+        <div class="lap-stats-bar" aria-label="Lap Statistics">
+          <div class="stat-item">
+            <span class="stat-label">Total Laps</span>
+            <span id="totalLapsVal" class="stat-value">0</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-label">Fastest Lap</span>
+            <span id="fastestLapVal" class="stat-value stat-digital">--:--.---</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-label">Slowest Lap</span>
+            <span id="slowestLapVal" class="stat-value stat-digital">--:--.---</span>
+          </div>
+        </div>
+
         <!-- Divider line -->
         <div class="card-divider"></div>
 

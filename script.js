@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const lapTable = document.getElementById('lapTable');
   const lapList = document.getElementById('lapList');
 
+  const totalLapsVal = document.getElementById('totalLapsVal');
+  const fastestLapVal = document.getElementById('fastestLapVal');
+  const slowestLapVal = document.getElementById('slowestLapVal');
+
   const themeToggleBtn = document.getElementById('themeToggleBtn');
 
   // --------------------------------------------------------------------------
@@ -37,6 +41,46 @@ document.addEventListener('DOMContentLoaded', () => {
   let laps = [];
 
   /**
+   * Formats milliseconds for Lap Statistics (e.g. 00:02.273)
+   */
+  function formatStatTime(ms) {
+    if (ms === null || ms === undefined || isNaN(ms)) return '--:--.---';
+    const totalSeconds = Math.floor(ms / 1000);
+    const millis = Math.floor(ms % 1000);
+    const seconds = totalSeconds % 60;
+    const minutes = Math.floor((totalSeconds / 60) % 60);
+    const hours = Math.floor(totalSeconds / 3600);
+
+    const pad = (num) => String(num).padStart(2, '0');
+    const padMs = (num) => String(num).padStart(3, '0');
+
+    if (hours > 0) {
+      return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${padMs(millis)}`;
+    }
+    return `${pad(minutes)}:${pad(seconds)}.${padMs(millis)}`;
+  }
+
+  /**
+   * Recalculates Total Laps, Fastest Lap duration, and Slowest Lap duration
+   */
+  function updateLapStats() {
+    totalLapsVal.textContent = laps.length;
+
+    if (laps.length === 0) {
+      fastestLapVal.textContent = '--:--.---';
+      slowestLapVal.textContent = '--:--.---';
+      return;
+    }
+
+    const lapTimes = laps.map((l) => l.lapTime);
+    const fastestMs = Math.min(...lapTimes);
+    const slowestMs = Math.max(...lapTimes);
+
+    fastestLapVal.textContent = formatStatTime(fastestMs);
+    slowestLapVal.textContent = formatStatTime(slowestMs);
+  }
+
+  /**
    * Toggles empty state and lap table display based on laps.length
    */
   function updateLapUI() {
@@ -47,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
       emptyLaps.classList.add('hidden');
       lapTable.classList.remove('hidden');
     }
+    updateLapStats();
   }
 
   // --------------------------------------------------------------------------
