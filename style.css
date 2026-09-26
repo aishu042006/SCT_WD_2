@@ -539,7 +539,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  min-width: 260px; /* Ensures readable columns on narrow screens */
+  min-width: 340px; /* Ensures readable columns on narrow screens */
 }
 
 .hidden,
@@ -554,7 +554,7 @@ body {
   font-size: clamp(0.7rem, 1.6vw, 0.78rem);
   font-weight: 700;
   letter-spacing: 0.08em;
-  padding: clamp(0.65rem, 1.8vw, 0.9rem) clamp(0.65rem, 2vw, 1.25rem);
+  padding: clamp(0.65rem, 1.8vw, 0.9rem) clamp(0.5rem, 1.8vw, 1rem);
   border-bottom: 1px solid var(--table-row-border);
   position: sticky;
   top: 0;
@@ -563,7 +563,7 @@ body {
 }
 
 .lap-table td {
-  padding: clamp(0.65rem, 1.8vw, 0.9rem) clamp(0.65rem, 2vw, 1.25rem);
+  padding: clamp(0.65rem, 1.8vw, 0.9rem) clamp(0.5rem, 1.8vw, 1rem);
   font-size: clamp(0.82rem, 2vw, 0.92rem);
   color: var(--text-primary);
   border-bottom: 1px solid var(--table-row-border);
@@ -586,13 +586,68 @@ body {
 }
 
 .col-lap {
-  width: 22%;
+  width: 18%;
 }
 
 .col-time, .col-total {
-  width: 39%;
+  width: 30%;
   font-family: var(--font-digital);
   font-variant-numeric: tabular-nums slashed-zero;
+}
+
+.col-status {
+  width: 22%;
+  text-align: center;
+}
+
+/* Status Column Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: clamp(0.68rem, 1.4vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 0.25s ease;
+  line-height: 1.25;
+}
+
+.badge-fastest {
+  background-color: rgba(16, 185, 129, 0.16);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+[data-theme="light"] .badge-fastest {
+  background-color: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.badge-slowest {
+  background-color: rgba(239, 68, 68, 0.16);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+[data-theme="light"] .badge-slowest {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.badge-normal {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: var(--text-muted);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+[data-theme="light"] .badge-normal {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border-color: #cbd5e1;
 }
 
 /* Dynamic Animation */

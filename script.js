@@ -81,15 +81,81 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
+   * Computes status ('fastest', 'slowest', 'normal') for each lap
+   */
+  function computeLapStatuses() {
+    if (laps.length <= 1) {
+      return laps.map(l => ({ ...l, status: 'normal' }));
+    }
+
+    const lapTimes = laps.map(l => l.lapTime);
+    const minTime = Math.min(...lapTimes);
+    const maxTime = Math.max(...lapTimes);
+
+    // If all laps have identical duration, mark all normal
+    if (minTime === maxTime) {
+      return laps.map(l => ({ ...l, status: 'normal' }));
+    }
+
+    // Deterministically pick earliest recorded lap (smallest id) for fastest & slowest
+    const sortedById = [...laps].sort((a, b) => a.id - b.id);
+    const fastestLapObj = sortedById.find(l => l.lapTime === minTime);
+    const slowestLapObj = sortedById.find(l => l.lapTime === maxTime);
+
+    const fastestId = fastestLapObj ? fastestLapObj.id : null;
+    const slowestId = slowestLapObj ? slowestLapObj.id : null;
+
+    return laps.map(l => {
+      let status = 'normal';
+      if (l.id === fastestId) status = 'fastest';
+      else if (l.id === slowestId) status = 'slowest';
+      return { ...l, status };
+    });
+  }
+
+  /**
+   * Re-renders the lap table rows dynamically with status badges
+   */
+  function renderLapTable() {
+    const processedLaps = computeLapStatuses();
+    const padLapNum = (num) => String(num).padStart(2, '0');
+
+    lapList.innerHTML = processedLaps.map((lap, index) => {
+      const isNewest = index === 0;
+      const animClass = isNewest ? ' class="lap-row-anim"' : '';
+      let badgeHtml = '';
+
+      if (lap.status === 'fastest') {
+        badgeHtml = '<span class="status-badge badge-fastest">Fastest</span>';
+      } else if (lap.status === 'slowest') {
+        badgeHtml = '<span class="status-badge badge-slowest">Slowest</span>';
+      } else {
+        badgeHtml = '<span class="status-badge badge-normal">Normal</span>';
+      }
+
+      return `
+        <tr${animClass}>
+          <td class="col-lap">#${padLapNum(lap.id)}</td>
+          <td class="col-time">${formatLapTime(lap.lapTime)}</td>
+          <td class="col-total">${formatLapTime(lap.totalTime)}</td>
+          <td class="col-status">${badgeHtml}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  /**
    * Toggles empty state and lap table display based on laps.length
    */
   function updateLapUI() {
     if (laps.length === 0) {
       emptyLaps.classList.remove('hidden');
       lapTable.classList.add('hidden');
+      lapList.innerHTML = '';
     } else {
       emptyLaps.classList.add('hidden');
       lapTable.classList.remove('hidden');
+      renderLapTable();
     }
     updateLapStats();
   }
@@ -209,23 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     laps.unshift(newLap);
 
-    // Update visibility of empty state vs table
+    // Update visibility of empty state, table rows, and recalculated statuses
     updateLapUI();
-
-    const padLapNum = (num) => String(num).padStart(2, '0');
-
-    // Create table row element
-    const tr = document.createElement('tr');
-    tr.className = 'lap-row-anim';
-
-    tr.innerHTML = `
-      <td class="col-lap">${padLapNum(lapCount)}</td>
-      <td class="col-time">${formatLapTime(lapDurationMs)}</td>
-      <td class="col-total">${formatLapTime(currentTotalMs)}</td>
-    `;
-
-    // Insert newest lap at top of the table
-    lapList.insertBefore(tr, lapList.firstChild);
   }
 
   function handleReset() {
