@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch | Track your time precisely</title>
+
+  <!-- Google Fonts for Digital & UI Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header Area with Brand Logo + Title on Left, Theme Toggle on Top Right -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="14" r="8"/>
+            <line x1="12" y1="6" x2="12" y2="14"/>
+            <line x1="12" y1="2" x2="12" y2="4"/>
+            <line x1="10" y1="2" x2="14" y2="2"/>
+            <line x1="18.5" y1="7.5" x2="19.5" y2="6.5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="main-title">STOPWATCH</h1>
+          <p class="subtitle">Track your time precisely.</p>
+        </div>
+      </div>
+
+      <!-- Light / Dark Mode Toggle Button at Top Right -->
+      <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle light or dark theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Main Stopwatch Container -->
+    <main class="main-content">
+      <div class="stopwatch-card">
+        <!-- Digital Timer Display featuring Hours : Minutes : Seconds . Centiseconds -->
+        <div class="timer-display-container">
+          <div class="timer-display" id="timerDisplay" aria-live="polite" aria-label="Current elapsed time">
+            <span class="time-part"><span id="hoursVal">00</span></span>
+            <span class="time-colon">:</span>
+            <span class="time-part"><span id="minsVal">00</span></span>
+            <span class="time-colon">:</span>
+            <span class="time-part"><span id="secsVal">00</span></span>
+            <span class="time-dot">.</span>
+            <span class="time-part time-cs"><span id="msVal">00</span></span>
+          </div>
+        </div>
+
+        <!-- Controls Section: LAP | START (large primary) | RESET -->
+        <div class="controls-group">
+          <button id="lapBtn" class="btn btn-secondary" disabled aria-label="Record lap time">LAP</button>
+
+          <button id="startPauseBtn" class="btn btn-primary" aria-label="Start stopwatch">
+            <span id="startBtnText" class="btn-text">START</span>
+          </button>
+
+          <button id="resetBtn" class="btn btn-secondary" disabled aria-label="Reset stopwatch">RESET</button>
+        </div>
+
+        <!-- Divider line -->
+        <div class="card-divider"></div>
+
+        <!-- Lap Section inside the Main Stopwatch Box -->
+        <div class="laps-container">
+          <div class="lap-table-wrapper">
+            <!-- Empty state when no laps recorded -->
+            <div id="emptyLaps" class="empty-laps">
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <p>No laps recorded yet</p>
+            </div>
+
+            <!-- Lap Table -->
+            <table id="lapTable" class="lap-table hidden" aria-label="Recorded Laps Table">
+              <thead>
+                <tr>
+                  <th scope="col" class="col-lap">LAP</th>
+                  <th scope="col" class="col-time">LAP TIME</th>
+                  <th scope="col" class="col-total">TOTAL TIME</th>
+                </tr>
+              </thead>
+              <tbody id="lapList">
+                <!-- Dynamic lap rows injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
