@@ -484,8 +484,10 @@ body {
   min-width: 260px; /* Ensures readable columns on narrow screens */
 }
 
+.hidden,
+.empty-laps.hidden,
 .lap-table.hidden {
-  display: none;
+  display: none !important;
 }
 
 .lap-table th {

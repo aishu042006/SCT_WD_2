@@ -34,6 +34,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let lapCount = 0;
   let lastLapTotalTime = 0;
+  let laps = [];
+
+  /**
+   * Toggles empty state and lap table display based on laps.length
+   */
+  function updateLapUI() {
+    if (laps.length === 0) {
+      emptyLaps.classList.remove('hidden');
+      lapTable.classList.add('hidden');
+    } else {
+      emptyLaps.classList.add('hidden');
+      lapTable.classList.remove('hidden');
+    }
+  }
 
   // --------------------------------------------------------------------------
   // 3. High Precision Timing Engine (performance.now)
@@ -142,11 +156,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const lapDurationMs = currentTotalMs - lastLapTotalTime;
     lastLapTotalTime = currentTotalMs;
 
-    // Show lap table on first recorded lap
-    if (lapCount === 1) {
-      emptyLaps.classList.add('hidden');
-      lapTable.classList.remove('hidden');
-    }
+    const newLap = {
+      id: lapCount,
+      lapTime: lapDurationMs,
+      totalTime: currentTotalMs
+    };
+
+    laps.unshift(newLap);
+
+    // Update visibility of empty state vs table
+    updateLapUI();
 
     const padLapNum = (num) => String(num).padStart(2, '0');
 
@@ -175,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elapsedTime = 0;
     lapCount = 0;
     lastLapTotalTime = 0;
+    laps = [];
 
     // Reset timer display
     renderTimerDisplay(0);
@@ -189,8 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset Lap Table UI
     lapList.innerHTML = '';
-    lapTable.classList.add('hidden');
-    emptyLaps.classList.remove('hidden');
+    updateLapUI();
   }
 
   // --------------------------------------------------------------------------
